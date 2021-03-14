@@ -55,6 +55,15 @@ variable security_group_description {
     type = string
 }
 
+
 variable prefix {
+    type = string
+}
+
+variable ami {
+    type = string
+}
+
+variable instance_type {
     type = string
 }
