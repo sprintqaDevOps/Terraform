@@ -19,7 +19,7 @@ variable key_name {
 variable ssh_key_path {
     type = string
     default =  "~/.ssh/id_rsa.pub"
-    desdescription = "path of ssh public key"  
+    description = "path of ssh public key"  
 }
 
 variable region { 
@@ -62,14 +62,13 @@ variable prefix {
 
 variable ami {
     type = string
-    description = "The id of the machine image (AMI) to use for the server.”
+    description = "Image of ec2"
     validation {
-                condition             = length(var.ami) > 4 && substr(var.ami, 0, 4) == "ami-"
-                error_message         = "The ami value must be a valid AMI id, starting with \"ami-\"." 
+                condition     = length(var.ami) > 4 && substr(var.ami, 0, 4) == "ami-"
+                error_message = "The ami value must be a valid AMI id, starting with ami-."
         }
 
 }
-
 variable instance_type {
     type = string
 }
