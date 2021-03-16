@@ -24,8 +24,21 @@ data "aws_subnet" "existing_subnet" {
   id = var.subnet_id
 }
 
+data "aws_ami" "latest_amazon_linux_image" {
+  most_recent = true
+  owners      = ["amazon"]
+  filter {
+    name   = "name"
+    values = ["amzn2-ami-hvm-*-x86_64-gp2"]
+  }
+
+  filter {
+    name   = "virtualization-type"
+    values = ["hvm"]
+  }
+}
 resource "aws_instance" "web" {
-  ami                    = var.ami
+  ami                    = data.aws_ami.latest_amazon_linux_image.id
   instance_type          = var.instance_type
   vpc_security_group_ids = [aws_security_group.sg_1.id]
   subnet_id              = data.aws_subnet.existing_subnet.id
@@ -34,7 +47,52 @@ resource "aws_instance" "web" {
   tags = {
     Name = "${var.prefix} My_ec2"
   }
+  connection {
+		type        = "ssh"
+		host        = self.public_ip
+		user        = "ec2-user"
+		private_key = file("~/.ssh/id_rsa")
+		# Default timeout is 5 minutes
+		timeout     = "4m"
+	}
+
+	provisioner "file" {
+		content     = "Hello there"
+		destination = "/home/ec2-user/devops.txt"
+	}
+
+  provisioner "file" {
+		source      = "./instance-ip.txt"
+		destination = "/home/ec2-user/instance-ip.txt"
+	}
+
+	provisioner "local-exec" {
+		command = "echo ${self.public_ip} > instance-ip.txt"
+	}
+
+	# provisioner "remote-exec" {
+	# 	inline = [
+	# 		"touch /home/ec2-user/devops-remote-exec.txt",
+  #     "sudo yum install httpd -y",
+  #     "sudo systemctl enable httpd",
+  #     "sudo systemctl start httpd"
+	# 	]
+	# }
+
+  # provisioner "remote-exec" {
+	# 	inline = [
+	# 		 "sudo wget -O /etc/yum.repos.d/jenkins.repo https://pkg.jenkins.io/redhat/jenkins.repo",
+  #      "sudo rpm --import https://pkg.jenkins.io/redhat/jenkins.io.key",
+  #      "sudo yum upgrade",
+  #      "sudo yum install jenkins java-1.8.0-openjdk-devel -y",
+  #      "sudo systemctl daemon-reload",
+  #      "sudo systemctl start jenkins",
+  #      "sudo systemctl enable jenkins"
+	# 	]
+	# }
+           
 }
+
 
 resource "aws_key_pair" "my_macbook_key" {
   key_name   = var.key_name
@@ -54,14 +112,21 @@ resource "aws_security_group" "sg_1" {
     cidr_blocks = ["0.0.0.0/0"]
   }
 
-   ingress {
+  ingress {
+    description = "http from internet"
+    from_port   = 8080
+    to_port     = 8080
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  ingress {
     description = "http from internet"
     from_port   = 80
     to_port     = 80
     protocol    = "tcp"
     cidr_blocks = ["0.0.0.0/0"]
   }
-
   egress {
     from_port   = 0
     to_port     = 0
@@ -82,56 +147,56 @@ output "arn" {
 }
 
 
-variable instance_tenancy {
-    type = string
-    default = "default"
-    description = "A tenancy option for instances launched into the VPC"
+variable "instance_tenancy" {
+  type        = string
+  default     = "default"
+  description = "A tenancy option for instances launched into the VPC"
 }
 
-variable key_name {
-    type = string
-    default = "my_macbook_key"
-    description = "name of keypair"
+variable "key_name" {
+  type        = string
+  default     = "my_macbook_key"
+  description = "name of keypair"
 }
 
-variable ssh_key_path {
-    type = string
-    default =  "~/.ssh/id_rsa.pub"
-    description = "path of ssh public key"  
+variable "ssh_key_path" {
+  type        = string
+  default     = "~/.ssh/id_rsa.pub"
+  description = "path of ssh public key"
 }
 
-variable region { 
-    type = string
-    default = "us-east-1"
-    description = "Location of resources"
-}
-
-
-variable security_group_name {
-    type = string
+variable "region" {
+  type        = string
+  default     = "us-east-1"
+  description = "Location of resources"
 }
 
 
-variable security_group_description {
-    type = string
+variable "security_group_name" {
+  type = string
 }
 
 
-variable prefix {
-    type = string
+variable "security_group_description" {
+  type = string
 }
 
-variable ami {
-    type = string
-    description = "Image of ec2"
-    validation {
-                condition     = length(var.ami) > 4 && substr(var.ami, 0, 4) == "ami-"
-                error_message = "The ami value must be a valid AMI id, starting with ami-."
-        }
+
+variable "prefix" {
+  type = string
+}
+
+variable "ami" {
+  type        = string
+  description = "Image of ec2"
+  validation {
+    condition     = length(var.ami) > 4 && substr(var.ami, 0, 4) == "ami-"
+    error_message = "The ami value must be a valid AMI id, starting with ami-."
+  }
 
 }
-variable instance_type {
-    type = string
+variable "instance_type" {
+  type = string
 }
 
 
