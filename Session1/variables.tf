@@ -60,15 +60,15 @@ variable prefix {
     type = string
 }
 
-variable ami {
-    type = string
-    description = "Image of ec2"
-    validation {
-                condition     = length(var.ami) > 4 && substr(var.ami, 0, 4) == "ami-"
-                error_message = "The ami value must be a valid AMI id, starting with ami-."
-        }
+# variable ami {
+#     type = string
+#     description = "Image of ec2"
+#     validation {
+#                 condition     = length(var.ami) > 4 && substr(var.ami, 0, 4) == "ami-"
+#                 error_message = "The ami value must be a valid AMI id, starting with ami-."
+#         }
 
-}
+# }
 variable instance_type {
     type = string
 }
