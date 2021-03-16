@@ -7,7 +7,7 @@ terraform {
   }
 }
 
-# Configure the AWS Provider
+# Configure the AWS Provider22
 provider "aws" {
   region = var.region
 }
