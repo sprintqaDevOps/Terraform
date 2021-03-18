@@ -12,11 +12,13 @@ resource "aws_instance" "web" {
   key_name               = var.key_name
   user_data = <<-EOF
                  #!/bin/bash
-                 sudo yum update -y && sudo yum install -y docker
-                 sudo systemctl start docker
-
-                 sudo usermod -aG docker ec2-user
-                 docker run -p 8080:80 nginx
+                  sudo wget -O /etc/yum.repos.d/jenkins.repo https://pkg.jenkins.io/redhat/jenkins.repo
+                  sudo rpm --import https://pkg.jenkins.io/redhat/jenkins.io.key
+                  sudo yum upgrade
+                  sudo yum install jenkins java-1.8.0-openjdk-devel -y
+                  sudo systemctl daemon-reload
+                  sudo systemctl start jenkins
+                  sudo systemctl enable jenkins
               EOF
 
   root_block_device {
