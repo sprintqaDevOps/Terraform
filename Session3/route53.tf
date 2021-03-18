@@ -8,4 +8,8 @@
 #   type    = "A"
 #   ttl     = "300"
 #   records = [aws_instance.web.public_ip]
+
+#   depends_on = [
+#     aws_instance.web
+#   ]
 # }
