@@ -1,5 +1,0 @@
-
-domain = "devopstechskills.com"
-zone_id = "Z03434252HL68X9FXVAYJ"
-record = "jenkinserver"
-jenkinserver.devopstechskills.com:8080
