@@ -1,6 +1,6 @@
 locals{
-   rds_cidr_blocks = ""
-   ec2_cidr_blocks = ""
+   rds_cidr_blocks = ["0.0.0.0/16"]
+   ec2_cidr_blocks = ["0.0.0.0/16"]
 }
 resource "aws_security_group" "ec2" {
   name = var.security_group_ec2

@@ -26,6 +26,6 @@ resource "aws_db_instance" "_" {
   storage_encrypted       = var.storage_encrypted
   storage_type            = var.storage_type
 
-  vpc_security_group_ids = ["${aws_security_group.db.id}"]
+  vpc_security_group_ids = [aws_security_group.db.id]
 
 }
