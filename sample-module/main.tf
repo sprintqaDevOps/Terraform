@@ -3,15 +3,16 @@ provider "aws" {
   
 }
 module "myapp-vpc" {
-  source = "./vpc"
+  #source = "./vpc"
+  source = "github.com/sprintqaDevOps/vpc.git"
   cidr_block_vpc = var.cidr_block_vpc
   prefix         = var.prefix
   cidr_block_subnet = var.cidr_block_subnet
   cidr_block_route = var.cidr_block_route
 }
 module "myapp-webserver" {
-  source = "./web-server"
-
+  #source = "./web-server"
+  source = "github.com/sprintqaDevOps/web-server.git"
   key_name     =var.key_name
   ssh_key_path =var.ssh_key_path
   ami          = var.ami
