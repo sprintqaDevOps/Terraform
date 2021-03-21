@@ -1,8 +1,8 @@
-# resource "random_password" "password" {
-#   length           = 16
-#   special          = true
-#   override_special = "_%@"
-# }
+resource "random_password" "password" {
+  length           = 16
+  special          = true
+  override_special = "_%@"
+}
 
 resource "aws_db_subnet_group" "db_subnet" {
   name       = var.subnetgroup
@@ -19,8 +19,8 @@ resource "aws_db_instance" "_" {
   multi_az                = var.multi_az
   name                    = var.name
   username                = var.username
-#   password              = random_password.password.result
-  password                = var.password
+  password                = random_password.password.result
+#   password                = var.password
   port                    = var.port
   publicly_accessible     = var.publicly_accessible
   storage_encrypted       = var.storage_encrypted
