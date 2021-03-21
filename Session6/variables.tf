@@ -19,7 +19,7 @@ variable multi_az {}
 variable name {}             
 variable username {}             
 # password              = random_password.password.result
-# variable password {}                
+variable password {}                
 variable port {}                
 variable publicly_accessible {}
 variable storage_encrypted {}  

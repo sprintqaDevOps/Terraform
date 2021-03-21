@@ -1,6 +1,8 @@
 locals{
-   rds_cidr_blocks = ["0.0.0.0/16"]
-   ec2_cidr_blocks = ["0.0.0.0/16"]
+    rds_cidr_blocks = [var.cidr_block_private_subnet1,var.cidr_block_private_subnet2]
+    ec2_cidr_blocks = [var.cidr_block_public_subnet]
+#    rds_cidr_blocks = ["0.0.0.0/16"]
+#    ec2_cidr_blocks = ["0.0.0.0/16"]
 }
 resource "aws_security_group" "ec2" {
   name = var.security_group_ec2
