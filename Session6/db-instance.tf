@@ -19,13 +19,14 @@ resource "aws_db_instance" "_" {
   multi_az                = var.multi_az
   name                    = var.name
   username                = var.username
-#   password              = random_password.password.result
+#   password                = random_password.password.result
   password                = var.password
   port                    = var.port
   publicly_accessible     = var.publicly_accessible
   storage_encrypted       = var.storage_encrypted
   storage_type            = var.storage_type
+  skip_final_snapshot     = true
 
-  vpc_security_group_ids = ["${aws_security_group.db.id}"]
+  vpc_security_group_ids = [aws_security_group.db.id]
 
 }
