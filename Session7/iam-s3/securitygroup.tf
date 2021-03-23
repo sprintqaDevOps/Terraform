@@ -1,6 +1,6 @@
 resource "aws_security_group" "example-instance" {
   vpc_id      = aws_vpc.main.id
-  name        = "allow-ssh"
+  name        = var.security_group_name
   description = "security group that allows ssh and all egress traffic"
   egress {
     from_port   = 0

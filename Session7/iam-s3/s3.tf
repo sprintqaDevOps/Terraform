@@ -1,9 +1,9 @@
 resource "aws_s3_bucket" "b" {
-  bucket = "mybucket-mcalik"
+  bucket = var.bucket_name
   acl    = "private"
   force_destroy = true
   tags = {
-    Name = "mybucket-mcalik"
+    Name = "${var.bucket_name}"
   }
 }
 
