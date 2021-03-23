@@ -25,3 +25,4 @@ variable "bucket_role_name" {}
 variable "role_policy_name" {}  
 variable "security_group_name" {} 
 variable "instance_type" {}       
+variable "bucket_name" {}
