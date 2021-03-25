@@ -4,7 +4,14 @@ resource "aws_launch_configuration" "example-launchconfig" {
   instance_type   = "t2.micro"
   key_name        = aws_key_pair.mykeypair.key_name
   security_groups = [aws_security_group.myinstance.id]
-  user_data       = "#!/bin/bash\napt-get update\napt-get -y install net-tools nginx\nMYIP=`ifconfig | grep -E '(inet 10)|(addr:10)' | awk '{ print $2 }' | cut -d ':' -f2`\necho 'this is: '$MYIP > /var/www/html/index.html"
+  user_data       = <<-EOF
+                 #!/bin/bash
+                  sudo apt-get update
+                  sudo apt-get -y install net-tools nginx
+                  MYIP=`ifconfig | grep -E '(inet 10)|(addr:10)' | awk '{ print $2 }' | cut -d ':' -f2`
+                  echo 'this is: '$MYIP > /var/www/html/index.html
+              EOF
+
   lifecycle {
     create_before_destroy = true
   }
