@@ -67,7 +67,7 @@ resource "aws_security_group" "db" {
     from_port       = var.rds_port
     to_port         = var.rds_port
     protocol        = "tcp"
-    security_groups =  ["${aws_security_group.ec2.id}"]
+    security_groups =  [aws_security_group.ec2.id]
   }
 
   # Allow all outbound traffic.
