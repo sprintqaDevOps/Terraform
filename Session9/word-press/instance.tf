@@ -82,15 +82,15 @@ resource "aws_instance" "web" {
   }
   provisioner "file" {
     content     = data.template_file.phpconfig.rendered
-    destination = "/var/www/html/wp-config.php"
+    destination = "/tmp/wp-config.php"
   }
   
-  # provisioner "remote-exec" {
-	# 	inline = [
-	# 		"echo 'Hello World'",
-  #     "sudo cp /tmp/wp-config.php /var/www/html/"
-	# 	]
-	# } 
+  provisioner "remote-exec" {
+		inline = [
+			"echo 'Hello World'",
+      "sudo cp /tmp/wp-config.php /var/www/html/"
+		]
+	} 
 
    timeouts {
     create = "20m"
