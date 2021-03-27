@@ -25,3 +25,5 @@ variable storage_type {}
 variable security_group_ec2 {}
 variable "rds_port" {}
 variable security_group_db {}
+variable "domain" {}
+variable "record" {}
