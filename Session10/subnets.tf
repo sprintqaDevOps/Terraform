@@ -30,7 +30,7 @@ variable "cidr_block_private" {
 
 resource "aws_subnet" "public_subnet" {
 #   for_each = toset(var.cidr_block_public)
-  for_each = [ ]
+  for_each = {for index, cidr in var.cidr_block_public : index => cidr}
   vpc_id = aws_vpc.my_vpc.id
   cidr_block = each.value
   map_public_ip_on_launch = true
@@ -38,8 +38,14 @@ resource "aws_subnet" "public_subnet" {
 
 resource "aws_subnet" "private_subnet" {
   # for_each = toset(var.cidr_block_private)
-  for_each = [  ]
+  for_each = {for index, cidr in var.cidr_block_private : index => cidr}
   vpc_id = aws_vpc.my_vpc.id
   cidr_block = each.value
   map_public_ip_on_launch = false
+}
+
+output "cidr_private" {
+
+  value = {for index, cidr in var.cidr_block_private : index => cidr}
+  
 }
