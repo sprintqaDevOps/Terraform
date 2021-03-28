@@ -7,6 +7,12 @@ provider "aws" {
     region = "us-west-1"
 }
 
+data aws_ami west {
+    provider = aws.west
+}
+data aws_ami east {
+    
+}
 resource "aws_instance" "web-east" {
 
   ami                    = "ami-038f1ca1bd58a5790"
