@@ -19,6 +19,14 @@ variable "private_cidr_mask" {
   }
 }
 
+variable "public_cidr_mask" {
+  default = {
+    "us-east-1c" = "10.0.3.0/24"
+    "us-east-1d" = "10.0.4.0/24"
+    "us-east-1e" = "10.0.5.0/24"
+  }
+}
+
 resource "aws_subnet" "private_subnet" {
 
   for_each = var.private_cidr_mask
@@ -30,6 +38,22 @@ resource "aws_subnet" "private_subnet" {
 
   tags = {
     "Name" = "${each.key}-private_subnet"
+  }
+
+}
+
+
+resource "aws_subnet" "public_subnet" {
+
+  for_each = var.public_cidr_mask
+
+  vpc_id = aws_vpc.my_vpc.id
+  cidr_block = each.value
+  availability_zone = each.key
+  map_public_ip_on_launch = true
+
+  tags = {
+    "Name" = "${each.key}-public_subnet"
   }
 
 }
