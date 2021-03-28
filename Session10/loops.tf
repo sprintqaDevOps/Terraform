@@ -1,18 +1,19 @@
-# #basic for loop
+#basic for loop
 # locals {
 #   list = ["a","b","c"]
+#   upper_list = [for s in local.list : upper(s)]
 # }
 # output "list" {
 #   value = [for s in local.list : upper(s)]
 # }
 
-# # list to map
-# locals {
-#   list = ["a","b","c"]
-# }
-# output "result" {
-#   value = {for index, list in local.list : index => list }
-# }
+# list to map
+locals {
+  names = ["a","b","c"]
+}
+output "result" {
+  value = {for index, name in local.names: index => name }
+}
 
 # # filtering
 # locals {
