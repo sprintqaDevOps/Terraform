@@ -19,6 +19,10 @@ resource "aws_instance" "web" {
   subnet_id              = aws_subnet.public_subnet_1.id
   key_name               = var.key_name
 
+ depends_on = [
+   aws_key_pair.my_macbook_key,
+   aws_subnet.public_subnet_1
+ ]
   tags = {
     Name = "${var.prefix} My_ec2"
   }

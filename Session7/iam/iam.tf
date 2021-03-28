@@ -12,19 +12,23 @@ resource "aws_iam_policy_attachment" "administrators-attach" {
 
 # user
 resource "aws_iam_user" "admin1" {
-  name = var.user_name1
-}
-
-resource "aws_iam_user" "admin2" {
-  name = var.user_name2
+  for_each = toset([for user in var.user_names : tostring(user)])
+  # for_each = var.user_names2
+  # count = length(var.user_names)
+  # for_each = { for index, user in var.user_names: index => user }
+  name = each.value
 }
 
 # adding users to group
 resource "aws_iam_group_membership" "administrators-users" {
   name = var.membership_name
+  for_each = toset([for user in var.user_names : tostring(user)])
+  # for_each = var.user_names2
+  # for_each = { for index, user in var.user_names: index => user }
+  # count = length(var.user_names)
   users = [
-    aws_iam_user.admin1.name,
-    aws_iam_user.admin2.name,
+    aws_iam_user.admin1[each.key].name
+
   ]
   group = aws_iam_group.administrators.name
 }
