@@ -2,7 +2,7 @@ provider "aws" {
   region = "us-east-1"
 }
 locals {
-  ports = [80, 22, 443, 3306]
+  ports = [80, 22]
 }
 resource "aws_security_group" "dynamic" {
   name        = "demo-dynamic"
