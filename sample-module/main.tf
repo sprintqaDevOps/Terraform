@@ -2,24 +2,21 @@ provider "aws" {
     region = var.region
   
 }
-module "myapp-vpc" {
-  #source = "./vpc"
-  source = "github.com/sprintqaDevOps/vpc.git"
-  cidr_block_vpc = var.cidr_block_vpc
-  prefix         = var.prefix
-  cidr_block_subnet = var.cidr_block_subnet
-  cidr_block_route = var.cidr_block_route
+resource "aws_default_vpc" "default" {
+  tags = {
+    Name = "Default VPC"
+ 
+  }
 }
-module "myapp-webserver" {
-  #source = "./web-server"
-  source = "github.com/sprintqaDevOps/web-server.git"
+module "Terraform_ec2" {
+  source = "./web-server"
+ # source = "github.com/sprintqaDevOps/web-server.git"
   key_name     =var.key_name
   ssh_key_path =var.ssh_key_path
   ami          = var.ami
   instance_type = var.instance_type
-  subnet_id     = module.myapp-vpc.subnet.id 
-  prefix        = var.prefix 
-  vpc_id        = module.myapp-vpc.my_vpc.id
+  vpc_id        = aws_default_vpc.default.id
   security_group_name= var.security_group_name
+  
 
 }
